@@ -6,6 +6,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.ivianuu.rxshortcuts.RxShortcuts;
 import com.ivianuu.rxshortcuts.Shortcut;
@@ -43,6 +44,9 @@ public class MainActivity extends AppCompatActivity {
                         .filter(new Predicate<ShortcutResult>() {
                             @Override
                             public boolean test(ShortcutResult shortcutResult) throws Exception {
+                                if (!shortcutResult.isSuccess()) {
+                                    Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
+                                }
                                 return shortcutResult.isSuccess();
                             }
                         })
