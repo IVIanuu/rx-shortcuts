@@ -24,14 +24,10 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.RestrictTo;
-import android.util.Log;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
-import io.reactivex.Observable;
 import io.reactivex.subjects.PublishSubject;
 
 /**
@@ -40,7 +36,7 @@ import io.reactivex.subjects.PublishSubject;
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public final class RxShortcutsFragment extends Fragment {
 
-    private Map<Integer, PublishSubject<Shortcut>> subjects = new HashMap<>();
+    private Map<Integer, PublishSubject<ShortcutResult>> subjects = new HashMap<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -56,11 +52,11 @@ public final class RxShortcutsFragment extends Fragment {
         startActivityForResult(pickIntent, requestCode);
     }
 
-    PublishSubject<Shortcut> getSubjectByRequestCode(int requestCode) {
+    PublishSubject<ShortcutResult> getSubjectByRequestCode(int requestCode) {
         return subjects.get(requestCode);
     }
 
-    void setSubjectForRequestCode(int requestCode, @NonNull PublishSubject<Shortcut> subject) {
+    void setSubjectForRequestCode(int requestCode, @NonNull PublishSubject<ShortcutResult> subject) {
         subjects.put(requestCode, subject);
     }
 
@@ -73,6 +69,13 @@ public final class RxShortcutsFragment extends Fragment {
             return;
         }
 
+        if (data == null) {
+            // remove pending request code
+            PublishSubject<ShortcutResult> subject = subjects.remove(requestCode);
+            subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.CANCELLED, null));
+            return;
+        }
+
         Intent shortcutIntent = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_INTENT);
         if (shortcutIntent == null) {
             // we have do request the shortcut intent
@@ -81,14 +84,14 @@ public final class RxShortcutsFragment extends Fragment {
                 return;
             } catch (ActivityNotFoundException e) {
                 // remove pending request code
-                PublishSubject<Shortcut> subject = subjects.remove(requestCode);
-                subject.onError(e);
+                PublishSubject<ShortcutResult> subject = subjects.remove(requestCode);
+                subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.FAILED, null));
                 return;
             }
         }
 
         // remove pending request code
-        PublishSubject<Shortcut> subject = subjects.remove(requestCode);
+        PublishSubject<ShortcutResult> subject = subjects.remove(requestCode);
 
         // handle intent
         Bitmap icon = Util.createShortcutIconString(getActivity(), data);
@@ -96,7 +99,7 @@ public final class RxShortcutsFragment extends Fragment {
 
         // notify subject
         Shortcut shortcut = new Shortcut(icon, shortcutIntent, name);
-        subject.onNext(shortcut);
+        subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.SUCCESS, shortcut));
     }
 
 }

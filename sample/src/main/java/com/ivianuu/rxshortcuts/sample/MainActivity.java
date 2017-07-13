@@ -1,8 +1,7 @@
 package com.ivianuu.rxshortcuts.sample;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -10,8 +9,11 @@ import android.widget.TextView;
 
 import com.ivianuu.rxshortcuts.RxShortcuts;
 import com.ivianuu.rxshortcuts.Shortcut;
+import com.ivianuu.rxshortcuts.ShortcutResult;
 
 import io.reactivex.functions.Consumer;
+import io.reactivex.functions.Function;
+import io.reactivex.functions.Predicate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -38,6 +40,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 rxShortcuts.requestShortcut(111)
+                        .filter(new Predicate<ShortcutResult>() {
+                            @Override
+                            public boolean test(ShortcutResult shortcutResult) throws Exception {
+                                return shortcutResult.isSuccess();
+                            }
+                        })
+                        .map(new Function<ShortcutResult, Shortcut>() {
+                            @Override
+                            public Shortcut apply(ShortcutResult shortcutResult) throws Exception {
+                                return shortcutResult.getShortcut();
+                            }
+                        })
                         .subscribe(new Consumer<Shortcut>() {
                             @Override
                             public void accept(Shortcut shortcut) throws Exception {

@@ -19,17 +19,11 @@ package com.ivianuu.rxshortcuts;
 import android.app.Activity;
 import android.app.FragmentManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import java.util.Timer;
-
-import io.reactivex.Observable;
 import io.reactivex.Single;
 import io.reactivex.SingleEmitter;
 import io.reactivex.SingleOnSubscribe;
-import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Predicate;
 import io.reactivex.subjects.PublishSubject;
 
 /**
@@ -55,15 +49,15 @@ public final class RxShortcuts {
     /**
      * Emits on shortcut selection
      */
-    public Single<Shortcut> requestShortcut(int requestCode) {
+    public Single<ShortcutResult> requestShortcut(int requestCode) {
         return requestShortcut(requestCode, rxShortcutsFragment.getString(R.string.default_picker_title));
     }
 
     /**
      * Emits on shortcut selection
      */
-    public Single<Shortcut> requestShortcut(final int requestCode, @NonNull final String pickerTitle) {
-        PublishSubject<Shortcut> subject = rxShortcutsFragment.getSubjectByRequestCode(requestCode);
+    public Single<ShortcutResult> requestShortcut(final int requestCode, @NonNull final String pickerTitle) {
+        PublishSubject<ShortcutResult> subject = rxShortcutsFragment.getSubjectByRequestCode(requestCode);
         if (subject == null) {
             // create a new subject
             subject = PublishSubject.create();
@@ -71,15 +65,15 @@ public final class RxShortcuts {
         }
 
         // request the shortcut
-        final PublishSubject<Shortcut> finalSubject = subject;
-        return Single.create(new SingleOnSubscribe<Shortcut>() {
+        final PublishSubject<ShortcutResult> finalSubject = subject;
+        return Single.create(new SingleOnSubscribe<ShortcutResult>() {
             @Override
-            public void subscribe(final SingleEmitter<Shortcut> e) throws Exception {
-                finalSubject.subscribe(new Consumer<Shortcut>() {
+            public void subscribe(final SingleEmitter<ShortcutResult> e) throws Exception {
+                finalSubject.subscribe(new Consumer<ShortcutResult>() {
                     @Override
-                    public void accept(Shortcut shortcut) throws Exception {
+                    public void accept(ShortcutResult shortcutResult) throws Exception {
                         if (!e.isDisposed()) {
-                            e.onSuccess(shortcut);
+                            e.onSuccess(shortcutResult);
                         }
                     }
                 }, new Consumer<Throwable>() {
