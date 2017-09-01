@@ -26,7 +26,7 @@ import static com.ivianuu.rxshortcuts.ShortcutResult.ResultCode.SUCCESS;
 /**
  * Represents a shortcut result
  */
-public class ShortcutResult {
+public final class ShortcutResult {
 
     @IntDef(value = {SUCCESS, CANCELLED, FAILED})
     public @interface ResultCode {
@@ -42,7 +42,7 @@ public class ShortcutResult {
     /**
      * Instantiates a new shortcut result
      */
-    public ShortcutResult(int requestCode, @ResultCode int resultCode, @Nullable Shortcut shortcut) {
+    ShortcutResult(int requestCode, @ResultCode int resultCode, @Nullable Shortcut shortcut) {
         this.requestCode = requestCode;
         this.resultCode = resultCode;
         this.shortcut = shortcut;

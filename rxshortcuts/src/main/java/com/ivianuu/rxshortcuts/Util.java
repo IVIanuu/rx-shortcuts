@@ -24,9 +24,10 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.support.annotation.NonNull;
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Utils
  */
 final class Util {
 
@@ -38,6 +39,7 @@ final class Util {
      * Returns the icon of the shortcut
      * If not present it will return the app icon of the app
      */
+    @NonNull
     static Bitmap createShortcutIconString(Context context, Intent intent) {
         Bitmap icon = intent.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON);
         if (icon == null) {

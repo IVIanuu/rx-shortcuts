@@ -27,7 +27,7 @@ import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
 /**
- * @author Manuel Wrage (IVIanuu)
+ * Rxshortcuts
  */
 public final class RxShortcuts {
 
@@ -42,6 +42,7 @@ public final class RxShortcuts {
     /**
      * Returns a new RxShortcuts instance
      */
+    @NonNull
     public static RxShortcuts create(@NonNull Activity activity) {
         return new RxShortcuts(activity);
     }
@@ -49,6 +50,7 @@ public final class RxShortcuts {
     /**
      * Emits on shortcut selection
      */
+    @NonNull
     public Single<ShortcutResult> requestShortcut(int requestCode) {
         return requestShortcut(requestCode, rxShortcutsFragment.getString(R.string.default_picker_title));
     }
@@ -56,6 +58,7 @@ public final class RxShortcuts {
     /**
      * Emits on shortcut selection
      */
+    @NonNull
     public Single<ShortcutResult> requestShortcut(final int requestCode, @NonNull final String pickerTitle) {
         PublishSubject<ShortcutResult> subject = rxShortcutsFragment.getSubjectByRequestCode(requestCode);
         if (subject == null) {

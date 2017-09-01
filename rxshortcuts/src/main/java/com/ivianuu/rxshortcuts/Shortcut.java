@@ -23,7 +23,7 @@ import android.support.annotation.NonNull;
 /**
  * Represents a shortcut
  */
-public class Shortcut {
+public final class Shortcut {
 
     private Bitmap icon;
     private Intent intent;
@@ -32,7 +32,7 @@ public class Shortcut {
     /**
      * Instantiates a new shortcut
      */
-    public Shortcut(@NonNull Bitmap icon, @NonNull Intent intent, @NonNull String name) {
+    Shortcut(@NonNull Bitmap icon, @NonNull Intent intent, @NonNull String name) {
         this.icon = icon;
         this.intent = intent;
         this.name = name;
