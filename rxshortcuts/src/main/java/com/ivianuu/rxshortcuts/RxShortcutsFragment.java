@@ -52,7 +52,7 @@ public final class RxShortcutsFragment extends Fragment {
         startActivityForResult(pickIntent, requestCode);
     }
 
-    @NonNull
+    @Nullable
     PublishSubject<ShortcutResult> getSubjectByRequestCode(int requestCode) {
         return subjects.get(requestCode);
     }
