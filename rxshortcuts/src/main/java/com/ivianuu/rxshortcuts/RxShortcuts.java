@@ -52,7 +52,7 @@ public final class RxShortcuts {
      */
     @NonNull
     public Single<ShortcutResult> requestShortcut(int requestCode) {
-        return requestShortcut(requestCode, rxShortcutsFragment.getString(R.string.default_picker_title));
+        return requestShortcut(requestCode, "");
     }
 
     /**
