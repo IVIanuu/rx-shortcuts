@@ -18,6 +18,7 @@ package com.ivianuu.rxshortcuts;
 
 import android.app.Activity;
 import android.app.FragmentManager;
+import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
@@ -50,7 +51,7 @@ public final class RxShortcuts {
     /**
      * Emits on shortcut selection
      */
-    @NonNull
+    @CheckResult @NonNull
     public Single<ShortcutResult> requestShortcut(int requestCode) {
         return requestShortcut(requestCode, "");
     }
@@ -58,7 +59,7 @@ public final class RxShortcuts {
     /**
      * Emits on shortcut selection
      */
-    @NonNull
+    @CheckResult @NonNull
     public Single<ShortcutResult> requestShortcut(final int requestCode, @NonNull final String pickerTitle) {
         PublishSubject<ShortcutResult> subject = rxShortcutsFragment.getSubjectByRequestCode(requestCode);
         if (subject == null) {
