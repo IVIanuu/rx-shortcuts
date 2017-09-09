@@ -2,7 +2,6 @@ package com.ivianuu.rxshortcuts.sample;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -11,10 +10,6 @@ import android.widget.Toast;
 import com.ivianuu.rxshortcuts.RxShortcuts;
 import com.ivianuu.rxshortcuts.Shortcut;
 import com.ivianuu.rxshortcuts.ShortcutResult;
-
-import io.reactivex.functions.Consumer;
-import io.reactivex.functions.Function;
-import io.reactivex.functions.Predicate;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,43 +32,21 @@ public class MainActivity extends AppCompatActivity {
         shortcutIcon = findViewById(R.id.shortcut_icon);
         executeShortcut = findViewById(R.id.execute_shortcut);
 
-        requestShortcut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        requestShortcut.setOnClickListener(view ->
                 rxShortcuts.requestShortcut(111)
-                        .filter(new Predicate<ShortcutResult>() {
-                            @Override
-                            public boolean test(ShortcutResult shortcutResult) throws Exception {
-                                if (!shortcutResult.isSuccess()) {
-                                    Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
-                                }
-                                return shortcutResult.isSuccess();
+                        .filter(shortcutResult -> {
+                            if (!shortcutResult.isSuccess()) {
+                                Toast.makeText(MainActivity.this, "Cancelled", Toast.LENGTH_SHORT).show();
                             }
+                            return shortcutResult.isSuccess();
                         })
-                        .map(new Function<ShortcutResult, Shortcut>() {
-                            @Override
-                            public Shortcut apply(ShortcutResult shortcutResult) throws Exception {
-                                return shortcutResult.getShortcut();
-                            }
-                        })
-                        .subscribe(new Consumer<Shortcut>() {
-                            @Override
-                            public void accept(Shortcut shortcut) throws Exception {
-                                handleShortcutResult(shortcut);
-                            }
-                        });
-            }
-        });
+                        .map(ShortcutResult::getShortcut)
+                        .subscribe(this::handleShortcutResult));
     }
 
     private void handleShortcutResult(final Shortcut shortcut) {
         shortcutTitle.setText(shortcut.getName());
         shortcutIcon.setImageBitmap(shortcut.getIcon());
-        executeShortcut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                startActivity(shortcut.getIntent());
-            }
-        });
+        executeShortcut.setOnClickListener(view -> startActivity(shortcut.getIntent()));
     }
 }

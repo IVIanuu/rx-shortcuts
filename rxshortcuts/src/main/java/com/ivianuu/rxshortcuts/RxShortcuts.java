@@ -22,9 +22,6 @@ import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
 
 import io.reactivex.Single;
-import io.reactivex.SingleEmitter;
-import io.reactivex.SingleOnSubscribe;
-import io.reactivex.functions.Consumer;
 import io.reactivex.subjects.PublishSubject;
 
 /**
@@ -70,27 +67,18 @@ public final class RxShortcuts {
 
         // request the shortcut
         final PublishSubject<ShortcutResult> finalSubject = subject;
-        return Single.create(new SingleOnSubscribe<ShortcutResult>() {
-            @Override
-            public void subscribe(final SingleEmitter<ShortcutResult> e) throws Exception {
-                finalSubject.subscribe(new Consumer<ShortcutResult>() {
-                    @Override
-                    public void accept(ShortcutResult shortcutResult) throws Exception {
-                        if (!e.isDisposed()) {
-                            e.onSuccess(shortcutResult);
-                        }
-                    }
-                }, new Consumer<Throwable>() {
-                    @Override
-                    public void accept(Throwable throwable) throws Exception {
-                        if (!e.isDisposed()) {
-                            e.onError(throwable);
-                        }
-                    }
-                });
+        return Single.create(e -> {
+            finalSubject.subscribe(shortcutResult -> {
+                if (!e.isDisposed()) {
+                    e.onSuccess(shortcutResult);
+                }
+            }, throwable -> {
+                if (!e.isDisposed()) {
+                    e.onError(throwable);
+                }
+            });
 
-                rxShortcutsFragment.requestShortcut(requestCode, pickerTitle);
-            }
+            rxShortcutsFragment.requestShortcut(requestCode, pickerTitle);
         });
     }
 
