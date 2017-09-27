@@ -24,6 +24,8 @@ import android.support.annotation.NonNull;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
+import static com.ivianuu.preconditions.Preconditions.checkNotNull;
+
 /**
  * Rxshortcuts
  */
@@ -42,6 +44,7 @@ public final class RxShortcuts {
      */
     @NonNull
     public static RxShortcuts create(@NonNull Activity activity) {
+        checkNotNull(activity, "activity == null");
         return new RxShortcuts(activity);
     }
 
@@ -58,6 +61,7 @@ public final class RxShortcuts {
      */
     @CheckResult @NonNull
     public Single<ShortcutResult> requestShortcut(final int requestCode, @NonNull final String pickerTitle) {
+        checkNotNull(pickerTitle, "pickerTitle == null");
         PublishSubject<ShortcutResult> subject = rxShortcutsFragment.getSubjectByRequestCode(requestCode);
         if (subject == null) {
             // create a new subject
