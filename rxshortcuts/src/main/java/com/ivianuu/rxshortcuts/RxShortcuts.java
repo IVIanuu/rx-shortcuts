@@ -24,7 +24,7 @@ import android.support.annotation.NonNull;
 import io.reactivex.Single;
 import io.reactivex.subjects.PublishSubject;
 
-import static com.ivianuu.preconditions.Preconditions.checkNotNull;
+import static com.ivianuu.rxshortcuts.Preconditions.checkNotNull;
 
 /**
  * Rxshortcuts
