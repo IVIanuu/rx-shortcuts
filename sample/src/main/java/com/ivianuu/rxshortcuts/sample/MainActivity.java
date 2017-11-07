@@ -46,7 +46,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void handleShortcutResult(final Shortcut shortcut) {
         shortcutTitle.setText(shortcut.getName());
-        shortcutIcon.setImageBitmap(shortcut.getIcon());
         executeShortcut.setOnClickListener(view -> startActivity(shortcut.getIntent()));
     }
 }
