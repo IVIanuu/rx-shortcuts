@@ -19,7 +19,6 @@ package com.ivianuu.rxshortcuts;
 import android.app.Fragment;
 import android.content.ActivityNotFoundException;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.annotation.CheckResult;
 import android.support.annotation.NonNull;
@@ -36,7 +35,7 @@ import io.reactivex.subjects.PublishSubject;
 @RestrictTo(RestrictTo.Scope.LIBRARY_GROUP)
 public final class RxShortcutsFragment extends Fragment {
 
-    private HashMap<Integer, PublishSubject<ShortcutResult>> subjects = new HashMap<>();
+    private final HashMap<Integer, PublishSubject<ShortcutResult>> subjects = new HashMap<>();
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -95,11 +94,12 @@ public final class RxShortcutsFragment extends Fragment {
         PublishSubject<ShortcutResult> subject = subjects.remove(requestCode);
 
         // handle intent
-        Bitmap icon = Util.createShortcutIconString(getActivity(), data);
+        Intent.ShortcutIconResource iconResource
+                = data.getParcelableExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE);
         String name = data.getStringExtra(Intent.EXTRA_SHORTCUT_NAME);
 
         // notify subject
-        Shortcut shortcut = new Shortcut(icon, shortcutIntent, name);
+        Shortcut shortcut = new Shortcut(iconResource, shortcutIntent, name);
         subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.SUCCESS, shortcut));
     }
 

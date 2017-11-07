@@ -17,7 +17,6 @@
 package com.ivianuu.rxshortcuts;
 
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
 
 /**
@@ -25,25 +24,24 @@ import android.support.annotation.NonNull;
  */
 public final class Shortcut {
 
-    private Bitmap icon;
+    private Intent.ShortcutIconResource iconResource;
     private Intent intent;
     private String name;
 
     /**
      * Instantiates a new shortcut
      */
-    Shortcut(@NonNull Bitmap icon, @NonNull Intent intent, @NonNull String name) {
-        this.icon = icon;
+    Shortcut(@NonNull Intent.ShortcutIconResource iconResource, @NonNull Intent intent, @NonNull String name) {
+        this.iconResource = iconResource;
         this.intent = intent;
         this.name = name;
     }
 
     /**
-     * Returns the icon of this shortcut
+     * Returns the icon res of this shortcut
      */
-    @NonNull
-    public Bitmap getIcon() {
-        return icon;
+    @NonNull public Intent.ShortcutIconResource getIconResource() {
+        return iconResource;
     }
 
     /**

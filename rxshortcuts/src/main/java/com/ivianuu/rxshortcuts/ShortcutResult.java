@@ -35,9 +35,9 @@ public final class ShortcutResult {
         int FAILED = 2;
     }
 
-    private int requestCode;
-    private int resultCode;
-    private Shortcut shortcut;
+    private final int requestCode;
+    private final int resultCode;
+    private final Shortcut shortcut;
 
     /**
      * Instantiates a new shortcut result
