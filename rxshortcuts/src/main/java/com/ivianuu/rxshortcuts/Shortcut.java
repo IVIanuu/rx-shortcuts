@@ -17,13 +17,16 @@
 package com.ivianuu.rxshortcuts;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 
 /**
  * Represents a shortcut
  */
 public final class Shortcut {
 
+    private Bitmap icon;
     private Intent.ShortcutIconResource iconResource;
     private Intent intent;
     private String name;
@@ -31,16 +34,27 @@ public final class Shortcut {
     /**
      * Instantiates a new shortcut
      */
-    Shortcut(@NonNull Intent.ShortcutIconResource iconResource, @NonNull Intent intent, @NonNull String name) {
+    Shortcut(@Nullable Bitmap icon,
+             @Nullable Intent.ShortcutIconResource iconResource,
+             @NonNull Intent intent,
+             @NonNull String name) {
+        this.icon = icon;
         this.iconResource = iconResource;
         this.intent = intent;
         this.name = name;
     }
 
     /**
+     * Returns the icon of this shortcut
+     */
+    @Nullable public Bitmap getIcon() {
+        return icon;
+    }
+
+    /**
      * Returns the icon res of this shortcut
      */
-    @NonNull public Intent.ShortcutIconResource getIconResource() {
+    @Nullable public Intent.ShortcutIconResource getIconResource() {
         return iconResource;
     }
 
