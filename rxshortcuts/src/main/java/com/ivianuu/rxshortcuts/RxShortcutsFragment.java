@@ -73,7 +73,7 @@ public final class RxShortcutsFragment extends Fragment {
         if (data == null) {
             // remove pending request code
             PublishSubject<ShortcutResult> subject = subjects.remove(requestCode);
-            subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.CANCELLED, null));
+            subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.Companion.getCANCELLED(), null));
             return;
         }
 
@@ -86,7 +86,7 @@ public final class RxShortcutsFragment extends Fragment {
             } catch (ActivityNotFoundException e) {
                 // remove pending request code
                 PublishSubject<ShortcutResult> subject = subjects.remove(requestCode);
-                subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.FAILED, null));
+                subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.Companion.getFAILED(), null));
                 return;
             }
         }
@@ -103,7 +103,7 @@ public final class RxShortcutsFragment extends Fragment {
 
         // notify subject
         Shortcut shortcut = new Shortcut(icon, iconResource, shortcutIntent, name);
-        subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.SUCCESS, shortcut));
+        subject.onNext(new ShortcutResult(requestCode, ShortcutResult.ResultCode.Companion.getSUCCESS(), shortcut));
     }
 
 }
